@@ -1,12 +1,12 @@
 management:
-#  endpoint:
-#    beans:
-#      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
   endpoints:
-#    enabled-by-default: false
+    enabled-by-default: false
     web:
       exposure:
-        include: '*'
+        include: shutdown
 
 swagger:
   enable: true
@@ -19,3 +19,5 @@ swagger:
     name: Thomas
     url: https://www.hellothomas.xyz
     email: tyty2017@qq.com
+
+my-netty.port: 8090
