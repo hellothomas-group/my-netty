@@ -1,0 +1,21 @@
+management:
+#  endpoint:
+#    beans:
+#      enabled: true
+  endpoints:
+#    enabled-by-default: false
+    web:
+      exposure:
+        include: '*'
+
+swagger:
+  enable: true
+  base-package: xyz.hellothomas.netty.api
+  title: My-Netty-Service
+  host: 127.0.0.1:8080
+  description: My-Netty服务
+  version: 1.0.0
+  contact:
+    name: Thomas
+    url: https://www.hellothomas.xyz
+    email: tyty2017@qq.com
