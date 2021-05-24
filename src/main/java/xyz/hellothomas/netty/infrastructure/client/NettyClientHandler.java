@@ -64,13 +64,15 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void sendHeartBeat(ChannelHandlerContext ctx) {
+        log.info("发送心跳包");
         //发送心跳消息，并在连续发送失败时关闭该连接
         ctx.writeAndFlush("heartbeat").addListener((ChannelFutureListener) channelFuture -> {
             if (channelFuture.isSuccess()) {
                 heartBeatFailedTimes.set(0);
             } else {
+                log.info("发送心跳包失败");
                 if (heartBeatFailedTimes.incrementAndGet() >= Constants.CLIENT_HEARTBEAT_FAILED_MAX_TIMES) {
-                    log.info("连续{}次心跳无返回,关闭该连接", Constants.CLIENT_HEARTBEAT_FAILED_MAX_TIMES);
+                    log.info("连续{}次发送心跳包失败,关闭该连接", Constants.CLIENT_HEARTBEAT_FAILED_MAX_TIMES);
                     ctx.close();
                 }
             }
