@@ -20,16 +20,16 @@ public class NettyServerHolder implements ApplicationListener<ApplicationStarted
     @Value("${my-netty.port}")
     private int port;
 
-    @Override
-    public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
-        initNettyServer(port);
-    }
-
     private synchronized static void initNettyServer(int port) {
         if (nettyServer == null) {
             nettyServer = new NettyServer(port);
             nettyServer.start();
         }
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
+        initNettyServer(port);
     }
 
     @PreDestroy

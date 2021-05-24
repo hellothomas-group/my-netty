@@ -52,13 +52,14 @@ public class NettyServer {
                 //设置队列大小
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 // 两小时内没有数据的通信时,TCP会自动发送一个活动探测数据报文
-                .childOption(ChannelOption.SO_KEEPALIVE, true);
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.TCP_NODELAY, true);
         //绑定端口,开始接收进来的连接
         try {
             ChannelFuture future = bootstrap.bind().sync();
             if (future.isSuccess()) {
-                serverChannel = future.channel();
                 log.info("服务器启动开始监听端口: {}", this.port);
+                serverChannel = future.channel();
             } else {
                 log.info("服务器启动失败监听端口: {}", this.port);
             }
@@ -74,6 +75,7 @@ public class NettyServer {
             }
             bossGroup.shutdownGracefully().sync();
             workGroup.shutdownGracefully().sync();
+            log.info("NettyServer已关闭");
         } catch (InterruptedException e) {
             log.error("服务器关闭异常为:{}", ExceptionUtils.getStackTrace(e));
         }

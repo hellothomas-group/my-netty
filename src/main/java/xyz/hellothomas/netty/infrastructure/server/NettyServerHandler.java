@@ -72,8 +72,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        ctx.close();
         log.error("channel:{}发生错误,此时连接通道数量为:{},异常为:{}", ctx.channel().id(),
                 channelMap.size(), ExceptionUtils.getStackTrace(cause));
+        ctx.close();
     }
 }
