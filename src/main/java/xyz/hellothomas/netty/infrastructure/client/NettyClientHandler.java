@@ -67,6 +67,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         log.info("发送心跳包");
         //发送心跳消息，并在连续发送失败时关闭该连接
         ctx.writeAndFlush("heartbeat").addListener((ChannelFutureListener) channelFuture -> {
+            // todo 修改以服务端返回结果为判断依据
             if (channelFuture.isSuccess()) {
                 heartBeatFailedTimes.set(0);
             } else {
