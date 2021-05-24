@@ -6,6 +6,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
+import xyz.hellothomas.netty.common.Constants;
 
 /**
  * @author Thomas
@@ -17,7 +18,7 @@ public class NettyServerChannelInitializer extends ChannelInitializer<SocketChan
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         //添加编解码
-        socketChannel.pipeline().addLast(new IdleStateHandler(0, 0, 200));
+        socketChannel.pipeline().addLast(new IdleStateHandler(0, 0, Constants.SERVER_ALL_IDLE_TIME_SECONDS));
         socketChannel.pipeline().addLast("decoder", new StringDecoder(CharsetUtil.UTF_8));
         socketChannel.pipeline().addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
         socketChannel.pipeline().addLast(new NettyServerHandler());

@@ -6,6 +6,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import xyz.hellothomas.netty.common.Constants;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,8 +61,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
+            log.info("channel:{}读写超时{}s,此时连接通道数量为:{}", ctx.channel().id(), Constants.SERVER_ALL_IDLE_TIME_SECONDS,
+                    channelMap.size());
             ctx.channel().close();
-            log.info("channel:{}读写超时,此时连接通道数量为:{}", ctx.channel().id(), channelMap.size());
         } else {
             super.userEventTriggered(ctx, evt);
         }

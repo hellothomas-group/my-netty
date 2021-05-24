@@ -10,15 +10,15 @@ public class NettyClientTest {
     @SneakyThrows
     @Test
     public void start() {
-        NettyClient nettyClient = new NettyClient("127.0.0.1", 8090);
+        NettyClient nettyClient = new NettyClient("127.0.0.1", 8082);
         nettyClient.start();
 
-        Thread.sleep(2000);
+//        Thread.sleep(2000);
         nettyClient.sendMsg("你好啊");
-        Thread.sleep(2000);
-        nettyClient.shutdown();
+//        Thread.sleep(2000);
+//        nettyClient.shutdown();
 
-        Thread.sleep(60000);
+        Thread.sleep(100000);
     }
 
     @Test

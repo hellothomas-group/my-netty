@@ -6,6 +6,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import xyz.hellothomas.netty.common.Constants;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +36,7 @@ public class NettyClient {
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 //该参数的作用就是禁止使用Nagle算法，使用于小数据即时传输
                 .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new NettyClientChannelInitializer());
+                .handler(new NettyClientChannelInitializer(this));
 
         ChannelFuture future = bootstrap.connect();
         //客户端断线重连逻辑
@@ -45,7 +46,8 @@ public class NettyClient {
                 clientChannel = future.channel();
             } else {
                 log.info("连接失败，进行断线重连");
-                channelFuture.channel().eventLoop().schedule(() -> start(), 30, TimeUnit.SECONDS);
+                channelFuture.channel().eventLoop().schedule(() -> start(),
+                        Constants.CLIENT_RECONNECT_DELAY_TIME_SECONDS, TimeUnit.SECONDS);
             }
         });
     }
