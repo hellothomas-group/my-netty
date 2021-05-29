@@ -13,18 +13,30 @@ public class NettyClientTest {
         NettyClient nettyClient = new NettyClient("127.0.0.1", 8082);
         nettyClient.start();
 
-//        Thread.sleep(2000);
+        Thread.sleep(2000);
         nettyClient.sendMsg("你好啊");
-//        Thread.sleep(2000);
+        nettyClient.sendMsg("1");
+        Thread.sleep(2000);
+        nettyClient.sendMsg("2");
 //        nettyClient.shutdown();
 
         Thread.sleep(100000);
     }
 
+    @SneakyThrows
     @Test
     public void start2() {
-        NettyClient nettyClient = new NettyClient("127.0.0.1", 8090);
+        NettyClient nettyClient = new NettyClient("127.0.0.1", 8082);
         nettyClient.start();
+
+        Thread.sleep(2000);
+        nettyClient.sendMsg("3");
+        nettyClient.sendMsg("4");
+        Thread.sleep(2000);
+        nettyClient.sendMsg("5");
+//        nettyClient.shutdown();
+
+        Thread.sleep(100000);
     }
 
     @Test

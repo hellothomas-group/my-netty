@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.util.concurrent.Executor;
 
 /**
  * @author Thomas
@@ -20,16 +21,19 @@ public class NettyServerHolder implements ApplicationListener<ApplicationStarted
     @Value("${my-netty.port}")
     private int port;
 
-    private synchronized static void initNettyServer(int port) {
+    private synchronized static void initNettyServer(int port, Executor executor) {
         if (nettyServer == null) {
             nettyServer = new NettyServer(port);
+            nettyServer.setExecutor(executor);
             nettyServer.start();
         }
     }
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
-        initNettyServer(port);
+        Executor executor =
+                applicationStartedEvent.getApplicationContext().getBean(Executor.class);
+        initNettyServer(port, executor);
     }
 
     @PreDestroy

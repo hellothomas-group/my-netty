@@ -1,7 +1,7 @@
 logging:
   level:
     xyz:
-      hellothomas.netty: debug
+      hellothomas: debug
     io:
       netty: debug
     root: info

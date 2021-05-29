@@ -20,4 +20,10 @@ swagger:
     url: https://www.hellothomas.xyz
     email: tyty2017@qq.com
 
-my-netty.port: 8090
+my-netty.port: 8082
+jedi:
+  enable: true
+  url: http://127.0.0.1:8081
+  namespace: dev
+  app-id: my-netty
+  executors:

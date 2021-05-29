@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executor;
 
 /**
  * @author Thomas
@@ -39,6 +40,11 @@ public class NettyServer {
      */
     private int port;
 
+    /**
+     * 业务线程池
+     */
+    private Executor executor;
+
     public NettyServer(int port) {
         this.port = port;
     }
@@ -47,7 +53,7 @@ public class NettyServer {
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new NettyServerChannelInitializer())
+                .childHandler(new NettyServerChannelInitializer(executor))
                 .localAddress(new InetSocketAddress(port))
                 //设置队列大小
                 .option(ChannelOption.SO_BACKLOG, 1024)
@@ -79,5 +85,13 @@ public class NettyServer {
         } catch (InterruptedException e) {
             log.error("服务器关闭异常为:{}", ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    public Executor getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
     }
 }

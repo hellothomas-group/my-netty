@@ -1,15 +1,18 @@
 package xyz.hellothomas.netty.infrastructure.server;
 
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import xyz.hellothomas.netty.common.Constants;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 
 /**
  * @author Thomas
@@ -20,6 +23,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private static final ConcurrentHashMap<ChannelId, ChannelHandlerContext> channelMap = new ConcurrentHashMap<>();
+
+    private Executor executor;
+
+    public NettyServerHandler() {
+    }
+
+    public NettyServerHandler(Executor executor) {
+        this.executor = executor;
+    }
 
     /**
      * 客户端连接会触发
@@ -42,8 +54,28 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("服务器收到消息: {}", msg.toString());
-        ctx.write("你也好哦");
-        ctx.flush();
+        if (executor != null) {
+            executor.execute(() -> {
+                log.info("业务异步处理...");
+                run(ctx);
+            });
+        } else {
+            run(ctx);
+        }
+        log.info("channelRead exit");
+    }
+
+    @SneakyThrows
+    private void run(ChannelHandlerContext ctx) {
+        Thread.sleep(10000);
+        log.info("服务器处理完成");
+        ctx.writeAndFlush("你也好哦").addListener((ChannelFutureListener) channelFuture -> {
+            if (channelFuture.isSuccess()) {
+                log.info("服务器返回成功");
+            } else {
+                log.error("服务器返回失败:{}", channelFuture.cause());
+            }
+        });
     }
 
     @Override

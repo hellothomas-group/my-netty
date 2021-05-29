@@ -4,6 +4,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import xyz.hellothomas.netty.common.Constants;
@@ -52,9 +53,11 @@ public class NettyClient {
         });
     }
 
+    @SneakyThrows
     public void sendMsg(String message) {
         if (clientChannel != null) {
-            clientChannel.writeAndFlush(message);
+            clientChannel.writeAndFlush(message).sync();
+            log.info("发送完成:{}", message);
         } else {
             log.info("client channel is not ready");
         }
