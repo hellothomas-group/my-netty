@@ -20,6 +20,10 @@ swagger:
     url: https://www.hellothomas.xyz
     email: tyty2017@qq.com
 
+logging:
+  level:
+    xyz:
+      hellothomas.jedi: trace
 my-netty.port: 8082
 jedi:
   enable: true

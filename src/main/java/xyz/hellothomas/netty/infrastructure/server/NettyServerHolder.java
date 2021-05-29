@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import xyz.hellothomas.jedi.client.constants.Constants;
 
 import javax.annotation.PreDestroy;
 import java.util.concurrent.Executor;
@@ -32,7 +33,8 @@ public class NettyServerHolder implements ApplicationListener<ApplicationStarted
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
         Executor executor =
-                applicationStartedEvent.getApplicationContext().getBean(Executor.class);
+                applicationStartedEvent.getApplicationContext().getBean(Constants.JEDI_DEFAULT_EXECUTOR_NAME,
+                        Executor.class);
         initNettyServer(port, executor);
     }
 
