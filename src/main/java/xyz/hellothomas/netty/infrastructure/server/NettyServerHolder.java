@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-import xyz.hellothomas.jedi.client.constants.Constants;
+import xyz.hellothomas.netty.application.MessageService;
 
 import javax.annotation.PreDestroy;
-import java.util.concurrent.Executor;
 
 /**
  * @author Thomas
@@ -22,20 +21,23 @@ public class NettyServerHolder implements ApplicationListener<ApplicationStarted
     @Value("${my-netty.port}")
     private int port;
 
-    private synchronized static void initNettyServer(int port, Executor executor) {
+    private final MessageService messageService;
+
+    public NettyServerHolder(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    private synchronized static void initNettyServer(int port, MessageService messageService) {
         if (nettyServer == null) {
             nettyServer = new NettyServer(port);
-            nettyServer.setExecutor(executor);
+            nettyServer.setMessageService(messageService);
             nettyServer.start();
         }
     }
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
-        Executor executor =
-                applicationStartedEvent.getApplicationContext().getBean(Constants.JEDI_DEFAULT_EXECUTOR_NAME,
-                        Executor.class);
-        initNettyServer(port, executor);
+        initNettyServer(port, messageService);
     }
 
     @PreDestroy

@@ -6,9 +6,8 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
+import xyz.hellothomas.netty.application.MessageService;
 import xyz.hellothomas.netty.common.Constants;
-
-import java.util.concurrent.Executor;
 
 /**
  * @author Thomas
@@ -17,13 +16,10 @@ import java.util.concurrent.Executor;
  * @version 1.0
  */
 public class NettyServerChannelInitializer extends ChannelInitializer<SocketChannel> {
-    private Executor executor;
+    private MessageService messageService;
 
-    public NettyServerChannelInitializer() {
-    }
-
-    public NettyServerChannelInitializer(Executor executor) {
-        this.executor = executor;
+    public NettyServerChannelInitializer(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @Override
@@ -32,6 +28,6 @@ public class NettyServerChannelInitializer extends ChannelInitializer<SocketChan
         socketChannel.pipeline().addLast(new IdleStateHandler(0, 0, Constants.SERVER_ALL_IDLE_TIME_SECONDS));
         socketChannel.pipeline().addLast("decoder", new StringDecoder(CharsetUtil.UTF_8));
         socketChannel.pipeline().addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
-        socketChannel.pipeline().addLast(new NettyServerHandler(executor));
+        socketChannel.pipeline().addLast(new NettyServerHandler(messageService));
     }
 }

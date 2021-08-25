@@ -30,4 +30,3 @@ jedi:
   url: http://127.0.0.1:8081
   namespace: dev
   app-id: my-netty
-  executors:
