@@ -23,7 +23,7 @@ swagger:
 logging:
   level:
     xyz:
-      hellothomas.jedi: trace
+      hellothomas.jedi: info
 my-netty.port: 8082
 jedi:
   enable: true
