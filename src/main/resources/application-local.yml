@@ -20,13 +20,7 @@ swagger:
     url: https://www.hellothomas.xyz
     email: tyty2017@qq.com
 
-logging:
-  level:
-    xyz:
-      hellothomas.jedi: info
 my-netty.port: 8082
 jedi:
   enable: true
-  url: http://127.0.0.1:8081
-  namespace: dev
-  app-id: my-netty
+  offline-enable: true
