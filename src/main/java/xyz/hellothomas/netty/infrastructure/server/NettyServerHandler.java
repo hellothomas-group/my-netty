@@ -49,7 +49,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("服务器收到消息: {}", msg.toString());
-        messageService.run(ctx, msg);
+        try {
+            messageService.run(ctx, msg);
+            log.info("提交业务异步处理成功");
+        } catch (Exception e) {
+            log.error("提交业务异步处理失败", e);
+        }
         log.info("channelRead exit");
     }
 

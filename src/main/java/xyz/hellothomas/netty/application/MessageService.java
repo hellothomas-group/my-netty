@@ -24,7 +24,7 @@ public class MessageService {
             if (channelFuture.isSuccess()) {
                 log.info("服务器返回成功");
             } else {
-                log.error("服务器返回失败:{}", channelFuture.cause());
+                log.error("服务器返回失败", channelFuture.cause());
             }
         });
     }
